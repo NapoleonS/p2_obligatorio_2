@@ -1,0 +1,141 @@
+﻿@using Dominio
+@model  Compra
+
+@{
+    List<Compra> compras = ViewBag.Compras;
+    ViewBag.Title = "Compras";
+}
+
+<h2>Compras</h2>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th scope="col">
+                Id
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th scope="col">
+                Pasajeros
+            </th>
+            <th scope="col">
+                Mayores
+            </th>
+            <th scope="col">
+                Menores
+            </th>
+            <th scope="col">
+                Fecha de compra
+            </th>
+            <th scope="col">
+                Excursion
+            </th>
+            <th scope="col">
+                Comienzo
+            </th>
+            <th scope="col">
+                Compañía aérea
+            </th>
+            <th scope="col">
+                Es de interes nacional
+            </th>
+            <th></th>
+        </tr>
+
+        @if (compras == null || compras.Count == 0)
+        {
+            <caption class="alert-danger"><strong>No tienes ninguna compra hecha.</strong></caption>
+        }
+        else
+        {
+
+            foreach (var item in compras)
+            {
+                <tr>
+                    <td>#@item.Id</td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantPasajeros)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantMayores)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantMenores)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaCreacion)
+                    </td>
+                    <td>
+                        @foreach (Destino destino in item.Excursion.Destinos)
+                        {
+                            <span>@destino.Ciudad, </span>
+                        }
+                    </td>
+                    <td>
+                        @item.Excursion.FechaComienzo
+                    </td>
+                    <td>
+                        @if (item.Excursion as Internacional != null)
+                        {
+                            var current = item.Excursion as Internacional;
+                            <span>@current.Compania.Codigo</span>
+                        }
+                        else
+                        {
+                            <span>No aplica.</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Excursion as Nacional != null)
+                        {
+                            var current = item.Excursion as Nacional;
+                            if (current.EsDeInteresNacional)
+                            {
+                                <span>Sí.</span>
+                            }
+                            else
+                            {
+                                <span>No.</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>No aplica.</span>
+                        }
+                    </td>
+                    <td>
+                        @if ((item.Excursion.FechaComienzo - DateTime.Now).TotalDays >= 10)
+                        {
+                            //TODO: preguntar al profe que hago con las compras que ya pasaron
+                            using (Html.BeginForm("Compras", "Usuario", FormMethod.Post))
+                            {
+                                <input type="hidden" value="@item.Id" name="id" />
+                                <button class="btn btn-primary">Cancelar.</button>
+
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

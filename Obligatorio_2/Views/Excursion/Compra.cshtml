@@ -1,0 +1,85 @@
+﻿@using Dominio
+@model  Compra
+
+@{
+    Excursion excursion = ViewBag.excursion;
+    int cantMayores = ViewBag.cantMayores;
+    int cantMenores = ViewBag.cantMenores;
+    var costo = ViewBag.costo;
+    ViewBag.Title = "Excursion";
+    Model.Excursion = excursion;
+}
+
+<h2>Excursion</h2>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Destinos</th>
+            <th scope="col">Fecha de comienzo</th>
+            <th scope="col">Dias de traslado</th>
+            <th scope="col">Precio por persona</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @excursion.Id
+            </td>
+            <td>
+                @excursion.Descripcion
+            </td>
+            <td>
+                @foreach (Destino destino in excursion.Destinos)
+                {
+                    <span>@destino.Ciudad, </span>
+                }
+            </td>
+            <td>
+                @excursion.FechaComienzo
+            </td>
+            <td>
+                @excursion.DiasTraslado
+            </td>
+            <td>
+                @excursion.CalcularCosto()
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+<form id="formulario" method="post">
+    <div class="form-group">
+        <label for="cantMayores">Cantidad de pasajeros mayores</label>
+        <input class="form-group" type="number" min="0" required id="cantMayores" name="cantMayores" value="@Model.CantMayores" />
+    </div>
+
+    <div class="form-group">
+        <label for="cantMenores">Cantidad de pasajeros menores</label>
+        <input class="form-group" type="number" min="0" name="cantMenores" value="@Model.CantMenores" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Comprar</button>
+</form>
+
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/validacionCompra.js"></script>
+}
+
+

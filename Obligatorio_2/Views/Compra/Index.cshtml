@@ -1,0 +1,72 @@
+﻿@using Dominio
+@{
+    ViewBag.Title = "Index";
+    var compras = ViewBag.Compras;
+}
+
+<h2>Compras</h2>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+@if (compras != null)
+{
+    foreach (Compra compra in compras)
+    {
+        <table class="table table-bordered">
+            <caption>Cliente</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Cedula</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @compra.Cliente.Cedula
+                    </td>
+                    <td>
+                        @compra.Cliente.Nombre
+                    </td>
+                    <td>
+                        @compra.Cliente.Apellido
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+
+            <thead>
+                <tr>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Destinos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">
+                        @compra.Excursion.Descripcion
+                    </td>
+                    <td>
+                        @foreach (Destino destino in compra.Excursion.Destinos)
+                        {
+                            <span>@destino.Ciudad, </span>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr/>
+    }
+}
+else
+{
+    <h2>No hay compras</h2>
+}

@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Login</h2>
+
+@if (ViewBag.Mensaje == "ok")
+{
+<div class="alert alert-success" role="alert">
+    Se ha registrado correctamente, ingrese con su nuevo usuario (su nombre de usuario es su número de cédula.
+</div>
+}
+
+<form  action="login" method="post">
+
+    <div class="form-group">
+        <label>Ingrese nombre del usuario</label>
+        <input type="text" name="nombreUsuario" />
+    </div>
+
+    <div class="form-group">
+        <label>Ingrese la contraseña</label>
+        <input type="password" name="password" />
+    </div>
+
+    <div class="form-group"><button type="submit">Enviar</button></div>
+
+</form>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+

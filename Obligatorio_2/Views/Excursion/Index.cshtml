@@ -1,0 +1,45 @@
+﻿@using Dominio
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Excursiones</h2>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Descripción</th>
+            <th scope="col">Destinos</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Excursion excursion in ViewBag.Excursiones)
+        {
+            <tr>
+                <td scope="row">
+                    @if (Session["rol"] != null)
+                    {
+                        <a href="/Excursion/Compra/@excursion.Id">@excursion.Descripcion</a>
+                    }
+                    else
+                    {
+                        <span>@excursion.Descripcion</span>
+                    }
+                    </td>
+                <td>
+                    @foreach (Destino destino in excursion.Destinos)
+                    {
+                    <span>@destino.Ciudad, </span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

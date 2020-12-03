@@ -1,0 +1,44 @@
+﻿@using Dominio
+@model  Cliente
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Registro</h2>
+
+@if (ViewBag.Mensaje == "ok")
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+@if (ViewBag.Mensaje != null && ViewBag.Mensaje != "ok")
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+    <form action="register" id="formulario" method="post">
+        <div> <label> Ingrese su cedula</label></div>
+        <input type="number" min="0" max="999999999" id="cedula" name="cedula" value="@Model.Cedula" />
+
+        <div> <label> Ingrese su nombre</label></div>
+        <input type="text" name="nombre" id="nombre" value="@Model.Nombre" />
+        
+        <div><label> Ingrese su apellido</label></div>
+        <input type="text" name="apellido" id="apellido" value="@Model.Apellido" />
+
+        <div><label>Elegir la contraseña (esta debe tener por lo menos 6 caracteres, una mayúscula, una minúscula y un número)</label></div>
+        <input type="password" name="password" id="password" value="@Model.Password"/>
+
+        <div><button type="submit">Registrar</button></div>
+    </form>
+
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/validacionRegister.js"></script>
+}
+
+
