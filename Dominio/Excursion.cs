@@ -59,9 +59,9 @@ namespace Dominio
             this.stock = stock;
         }
 
-        public int CalcularCosto(int cantPersonas = 1)
+        public double CalcularCosto(int cantPersonas = 1)
         {
-            int result = 0;
+            double result = 0;
             foreach (Destino destino in destinos)
             {
                 result += destino.CostoDiario * destino.Dias;

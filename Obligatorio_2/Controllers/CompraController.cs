@@ -14,29 +14,26 @@ namespace appWeb.Controllers
             {
                 return Redirect("/Usuario/Login");
             }
-            ViewBag.Compras = laA.ListaCompras;
+        
             ViewBag.Mensaje = mensaje;
             return View();
         }
 
-        public ActionResult Compra(int id)
+
+        [HttpPost]
+        public ActionResult Index(DateTime startDate, DateTime endDate)
         {
-            if ((String)Session["rol"] == null)
+            if ((String)Session["rol"] != "Operador")
             {
                 return Redirect("/Usuario/Login");
             }
-            var excursion = laA.BuscarExcursion(id);
-            ViewBag.excursion = excursion;
-            ViewBag.cantMayores = 0;
-            ViewBag.cantMenores = 0;
-            ViewBag.costo = excursion.CalcularCosto(ViewBag.cantMayores + ViewBag.cantMenores);
 
-            return View(new Compra());
+            ViewBag.Compras = laA.ComprasEntreFechas(startDate, endDate);
+            ViewBag.StartDate = startDate;
+            ViewBag.EndDate = endDate;
+
+            return View();
         }
-
-
-
-
 
     }
 }

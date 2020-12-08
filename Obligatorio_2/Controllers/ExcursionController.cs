@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace appWeb.Controllers
@@ -23,12 +24,13 @@ namespace appWeb.Controllers
             }
             Excursion excursion = laA.BuscarExcursion(id);
             ViewBag.excursion = excursion;
+            var costoDolares = excursion.CalcularCosto();
+            ViewBag.costoDolares = costoDolares;
+            ViewBag.costoPesos = laA.CambioAPesos(costoDolares);
             ViewBag.cantMayores = 0;
             ViewBag.cantMenores = 0;
             ViewBag.costo = excursion.CalcularCosto(ViewBag.cantMayores + ViewBag.cantMenores);
             return View(new Compra());
-            // TODO: preguntar como ordenar la lista ascendente por apellido sin un loop
-            // TODO: preguntar como es mejor borrar la compra si con un get o un post o un delete
         }
 
         [HttpPost]
@@ -53,6 +55,43 @@ namespace appWeb.Controllers
             return View(compra);
         }
 
+        public ActionResult Estadisticas(int? idDestino)
+        {
+            if ((String)Session["rol"] != "Operador")
+            {
+                return Redirect("/Usuario/Login");
+            }
+
+            if (idDestino != null)
+            {
+                Destino destino = laA.BuscarDestinoPorId(idDestino ?? 0);
+                List<Excursion> excursiones = laA.BuscarExcursionesPorDestino(destino);
+                ViewBag.Resultados = laA.OrdenarExcursionesPorFecha(excursiones);
+                ViewBag.idDestino = idDestino;  
+            }
+
+            ViewBag.Destinos = laA.ListaDestinos;
+            ViewBag.Populares = laA.DestinoMasPopular();
+
+            return View();
+        }
+
+        public ActionResult ListaExcursionesPorDestino(int idDestino)
+        {
+            if ((String)Session["rol"] != "Operador")
+            {
+                return Redirect("/Usuario/Login");
+            }
+
+            Destino destino = laA.BuscarDestinoPorId(idDestino);
+            List<Excursion> excursiones = laA.BuscarExcursionesPorDestino(destino);
+            ViewBag.Resultados = laA.OrdenarExcursionesPorFecha(excursiones);
+            ViewBag.Destinos = laA.ListaDestinos;
+            ViewBag.Populares = laA.DestinoMasPopular();
+            
+
+            return View("estadisticas");
+        }
 
     }
 }

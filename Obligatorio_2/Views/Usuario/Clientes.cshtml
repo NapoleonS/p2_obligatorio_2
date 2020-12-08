@@ -1,0 +1,29 @@
+﻿
+@using Dominio
+
+@{
+    ViewBag.Title = "Clientes";
+    var clientes = ViewBag.Clientes;
+}
+
+<h2>Clientes</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Cedula</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Cliente cliente in clientes)
+        {
+            <tr>
+                <td scope="row">@cliente.Nombre</td>
+                <td scope="row">@cliente.Apellido</td>
+                <td scope="row">@cliente.Cedula</td>
+            </tr>
+        }
+    </tbody>
+</table>

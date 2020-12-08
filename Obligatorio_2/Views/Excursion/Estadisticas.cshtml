@@ -1,0 +1,78 @@
+﻿@using Dominio
+@{
+    ViewBag.Title = "Estadisticas";
+    var destinos = ViewBag.Destinos;
+    var populares = ViewBag.Populares;
+    var excursiones = ViewBag.Resultados;
+}
+
+<h2>Estadisticas</h2>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
+<select id="destinos" name="idDestino">
+    <option value="" selected disabled hidden>Elija un destino...</option>
+    @foreach (Destino destino in destinos)
+    {
+        if (destino.Id == ViewBag.idDestino)
+        {
+            <option selected value="@destino.Id">@destino.Ciudad, @destino.Pais</option>
+        }
+        else
+        {
+            <option value="@destino.Id">@destino.Ciudad, @destino.Pais</option>
+        }
+    }
+</select>
+
+@if (excursiones != null)
+{
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Descripción</th>
+                <th scope="col">Destinos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Excursion excursion in excursiones)
+            {
+                <tr>
+                    <td scope="row">
+                        <span>@excursion.Descripcion</span>
+                    </td>
+                    <td>
+                        @foreach (Destino destino in excursion.Destinos)
+                        {
+                            <span>@destino.Ciudad, </span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div>
+    <h3>Destino(s) mas populares</h3>
+    <ul>
+        @foreach (Destino destino in populares)
+        {
+            <li>@destino.Ciudad, @destino.Pais</li>
+        }
+    </ul>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $("#destinos").change(function () {
+            window.location.href = "/excursion/estadisticas?idDestino=" + $("#destinos").val();
+        });
+    </script>
+}

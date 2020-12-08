@@ -80,25 +80,36 @@ namespace appWeb.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Compras(int id)
+
+        public ActionResult CancelarCompra(int id)
         {
             if ((String)Session["rol"] == null)
             {
                 return Redirect("/Usuario/Login");
             }
+
             Cliente usuario = unaA.BuscarUsuario((String)Session["user"]) as Cliente;
-            ViewBag.compras = unaA.ComprasDeCliente(usuario);
             if (unaA.BorrarCompra(id))
             {
             ViewBag.Mensaje = "Se ha cancelado con éxito la compra.";
             }
-            else
+
+            ViewBag.compras = unaA.ComprasDeCliente(usuario);
+
+            return View("Compras");
+        }
+
+        public ActionResult Clientes()
+        {
+            if ((String)Session["rol"] != "Operador")
             {
-                ViewBag.Error = "Se ha producido un error, comuníquese con un administrador";
+                return Redirect("/Usuario/Login");
             }
-            
+
+            ViewBag.Clientes = unaA.ClientesOrdenados();
+
             return View();
         }
+
     }
 }

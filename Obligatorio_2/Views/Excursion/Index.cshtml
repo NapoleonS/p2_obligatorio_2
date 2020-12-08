@@ -24,7 +24,7 @@
         {
             <tr>
                 <td scope="row">
-                    @if (Session["rol"] != null)
+                    @if ((String)Session["rol"] == "Cliente")
                     {
                         <a href="/Excursion/Compra/@excursion.Id">@excursion.Descripcion</a>
                     }

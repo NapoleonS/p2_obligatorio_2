@@ -26,11 +26,13 @@
                     @if ((String)Session["rol"] == "Operador")
                     {
                         <li><a href="/compra/index">Lista de Compras</a></li>
+                        <li><a href="/excursion/estadisticas">Estadísticas</a></li>
+                        <li><a href="/usuario/clientes">Clientes</a></li>
                     } 
                     
                     @if ((String)Session["rol"] == "Cliente")
                     {
-                        <li><a href="/usuario/compras">Mis Compra</a></li>
+                        <li><a href="/usuario/compras">Mis Compras</a></li>
                     }
 
                     @if (Session["rol"] == null)
@@ -52,7 +54,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year -177653 y 253573</p>
+            <p>&copy; @DateTime.Now.Year - 177653 y 253573</p>
         </footer>
     </div>
 

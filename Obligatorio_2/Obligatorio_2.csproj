@@ -89,6 +89,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile2.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\validacionRegister.js" />
     <Content Include="Scripts\validacionCompra.js" />
     <Content Include="Web.config" />
@@ -105,7 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Excursion\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -114,6 +126,9 @@
     <Content Include="Views\Compra\Index.cshtml" />
     <Content Include="Views\Usuario\Register.cshtml" />
     <Content Include="Views\Usuario\Compras.cshtml" />
+    <Content Include="Views\Excursion\Estadisticas.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Usuario\Clientes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

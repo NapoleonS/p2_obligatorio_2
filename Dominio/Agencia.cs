@@ -41,6 +41,75 @@ namespace Dominio
             return usuario;
         }
 
+        public List<Excursion> OrdenarExcursionesPorFecha(List<Excursion> lista)
+        {
+            List<Excursion> result = lista;
+            result.Sort((x, y) => DateTime.Compare(y.FechaComienzo, x.FechaComienzo));
+            return result;
+        }
+
+        public List<Cliente> ListaClientes
+        {
+            get
+            {
+                List<Cliente> result = new List<Cliente>();
+                foreach (Usuario usuario in listaUsuarios)
+                {
+                    if (usuario as Cliente != null)
+                    {
+                        result.Add(usuario as Cliente);
+                    }
+                }
+                return result;
+            }
+        }
+
+        public List<Cliente> ClientesOrdenados()
+        {
+            return ListaClientes.OrderBy(s => s.Apellido).ThenBy(s => s.Nombre).ToList();
+        }
+
+        public List<Destino> DestinoMasPopular()
+        {
+            int maxCount = 0;
+            List<Destino> result = new List<Destino>();
+            foreach (Destino destino in listaDestinos)
+            {
+            int count = 0;
+                foreach (Excursion excursion in ListaExcursiones)
+                {
+                    if (excursion.Destinos.Contains(destino))
+                    {
+                        count++;
+                    }
+                }
+                if (count > maxCount)
+                {
+                    maxCount = count;
+                    result.Clear();
+                    result.Add(destino);
+                }
+                else if (count == maxCount)
+                {
+                    result.Add(destino);
+                }
+            }
+            return result;
+        }
+
+        public List<Excursion> BuscarExcursionesPorDestino(Destino destino)
+        {
+            List<Excursion> result = new List<Excursion>();
+            foreach (Excursion excursion in ListaExcursiones)
+            {
+                if (excursion.Destinos.Contains(destino))
+                {
+                    result.Add(excursion);
+                }
+            }
+            return result;
+        }
+
 
         public static Agencia Instance
         {
@@ -94,17 +163,17 @@ namespace Dominio
 
         public Destino BuscarDestinoPorId(int id)
         {
-            int i = 0;
-            Destino destino = null;
-            while (destino == null && i < listaDestinos.Count)
+            Destino result = null;
+
+            foreach (Destino destino in listaDestinos)
             {
-                if (listaExcursiones[i].Id == id)
+                if (destino.Id == id)
                 {
-                    destino = listaDestinos[i];
+                    result = destino;
                 }
-                i++;
             }
-            return destino;
+
+            return result;
         }
 
         public Excursion BuscarExcursion(int id)
@@ -156,6 +225,19 @@ namespace Dominio
                 if (DateTime.Compare(fecha1, unaExcursion.FechaComienzo) <= 0 && DateTime.Compare(unaExcursion.FechaComienzo, fecha2) <= 0)
                 {
                     result.Add(unaExcursion);
+                }
+            }
+            return result;
+        }
+
+        public List<Compra> ComprasEntreFechas(DateTime start, DateTime end)
+        {
+            List<Compra> result = new List<Compra>();
+            foreach (Compra compra in ListaCompras)
+            {
+                if (compra.FechaCreacion >= start && compra.FechaCreacion < end)
+                {
+                    result.Add(compra);
                 }
             }
             return result;
@@ -229,6 +311,25 @@ namespace Dominio
             PrecargaExcursiones();
             PrecargarOperadores();
             PrecargaClientes();
+            PrecargaCompras();
+        }
+
+        private void PrecargaCompras()
+        {
+            var compra1 = new Compra();
+            compra1.CantMayores = 2;
+            compra1.Excursion = BuscarExcursion(1200);
+            compra1.Precio = compra1.Excursion.CalcularCosto();
+            compra1.Cliente = BuscarUsuario("47994721") as Cliente;
+            AgregarCompra(compra1);
+
+            var compra2 = new Compra();
+            compra2.CantMayores = 2;
+            compra2.CantMenores = 3;
+            compra2.Excursion = BuscarExcursion(1200);
+            compra2.Precio = compra2.Excursion.CalcularCosto();
+            compra2.Cliente = BuscarUsuario("47994721") as Cliente;
+            AgregarCompra(compra2);
         }
 
         private void PrecargarOperadores()
@@ -258,12 +359,12 @@ namespace Dominio
         {
 
             List<Destino> listaDestinos1 = new List<Destino>();
-            DateTime fecha1 = new DateTime(2012, 12, 31);
+            DateTime fecha1 = DateTime.Now.AddDays(14);
             AgregarCompania(1, "Estados Unidos");
             listaDestinos1.Add(BuscarDestinoPorCiudad("Nueva York", "Estados Unidos"));
             AgregarExcursionInternacional("Viaje de placer internacional", fecha1, listaDestinos1, 2, 24, BuscarCompania(1));
             
-            DateTime fecha2 = new DateTime(2018, 12, 31);
+            DateTime fecha2 = DateTime.Now.AddDays(9);
             List<Destino> listaDestinos2 = new List<Destino>();
             listaDestinos2.Add(BuscarDestinoPorCiudad("Nueva York", "Estados Unidos"));
             listaDestinos2.Add(BuscarDestinoPorCiudad("Londres", "Inglaterra"));
@@ -276,30 +377,31 @@ namespace Dominio
             listaDestinos3.Add(BuscarDestinoPorCiudad("Roma", "Italia"));
             AgregarExcursionInternacional("Viaje de placer internacional", fecha3, listaDestinos3, 5, 21, BuscarCompania(1));
 
-            DateTime fecha4 = new DateTime(2012, 12, 31);
+            DateTime fecha4 = DateTime.Now.AddDays(4);
             AgregarCompania(2, "Emiratos Arabes Unidos");
             List<Destino> listaDestinos4 = new List<Destino>();
             listaDestinos4.Add(BuscarDestinoPorCiudad("Dubai", "Emiratos Arabes Unidos"));
+            listaDestinos4.Add(BuscarDestinoPorCiudad("Tokyo", "Japon"));
             AgregarExcursionInternacional("Viaje de placer internacional", fecha4, listaDestinos4, 2, 24, BuscarCompania(2));
 
-            DateTime fecha5 = new DateTime(2012, 12, 31);
+            DateTime fecha5 = DateTime.Now.AddDays(32);
             List<Destino> listaDestinos5 = new List<Destino>();
             listaDestinos5.Add(BuscarDestinoPorCiudad("Rocha", "Uruguay"));
             AgregarExcursionNacional("Viaje de placer", fecha5, listaDestinos5, 0, 23, false);
 
-            DateTime fecha6 = new DateTime(2012, 12, 31);
+            DateTime fecha6 = DateTime.Now.AddDays(100);
             List<Destino> listaDestinos6 = new List<Destino>();
             listaDestinos6.Add(BuscarDestinoPorCiudad("Rivera", "Uruguay"));
             listaDestinos6.Add(BuscarDestinoPorCiudad("Montevideo", "Uruguay"));
             AgregarExcursionNacional("Viaje de placer", fecha6, listaDestinos6, 1, 23, true);
 
-            DateTime fecha7 = new DateTime(2012, 12, 31);
+            DateTime fecha7 = new DateTime(2019, 12, 31);
             List<Destino> listaDestinos7 = new List<Destino>();
             listaDestinos7.Add(BuscarDestinoPorCiudad("Rocha", "Uruguay"));
             listaDestinos7.Add(BuscarDestinoPorCiudad("Punta del Este", "Uruguay"));
             AgregarExcursionNacional("Viaje de placer", fecha7, listaDestinos7, 1, 23, false);
 
-            DateTime fecha8 = new DateTime(2012, 12, 31);
+            DateTime fecha8 = DateTime.Now.AddDays(3);
             List<Destino> listaDestinos8 = new List<Destino>();
             listaDestinos8.Add(BuscarDestinoPorCiudad("Rocha", "Uruguay"));
             listaDestinos8.Add(BuscarDestinoPorCiudad("Rivera", "Uruguay"));

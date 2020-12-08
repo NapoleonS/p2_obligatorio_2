@@ -13,7 +13,7 @@ namespace Dominio
         private Excursion excursion;
         private Cliente cliente;
         private int cantMayores = 0;
-        private decimal precio = 0;
+        private double precio = 0;
         private int cantMenores = 0;
         private DateTime fechaCreacion = new DateTime();
 
@@ -29,7 +29,7 @@ namespace Dominio
             set {  cliente = value; }
         }
 
-        public decimal Precio
+        public double Precio
         {
             get { return precio; }
             set { precio = value; }

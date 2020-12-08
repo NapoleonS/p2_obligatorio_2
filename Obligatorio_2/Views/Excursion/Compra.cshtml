@@ -27,7 +27,8 @@
             <th scope="col">Destinos</th>
             <th scope="col">Fecha de comienzo</th>
             <th scope="col">Dias de traslado</th>
-            <th scope="col">Precio por persona</th>
+            <th scope="col">Precio por persona (en dolares)</th>
+            <th scope="col">Precio por persona (en pesos)</th>
         </tr>
     </thead>
     <tbody>
@@ -49,6 +50,9 @@
             </td>
             <td>
                 @excursion.DiasTraslado
+            </td>
+            <td>
+                @excursion.CalcularCosto()
             </td>
             <td>
                 @excursion.CalcularCosto()
